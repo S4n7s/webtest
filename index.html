@@ -7,7 +7,39 @@
     <link rel="stylesheet" href="css/style.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
-        Telegram.WebApp.ready();
+        Telegram.WebApp.onEvent('themeChanged', function() {
+            document.body.style.backgroundColor = Telegram.WebApp.themeParams.bg_color;
+            document.body.style.color = Telegram.WebApp.themeParams.text_color;
+
+            let buttons = document.querySelectorAll('.btn');
+            buttons.forEach(function(button) {
+                button.style.backgroundColor = Telegram.WebApp.themeParams.button_color;
+                button.style.color = Telegram.WebApp.themeParams.button_text_color;
+            });
+
+            let secondaryButtons = document.querySelectorAll('.btn-secondary');
+            secondaryButtons.forEach(function(button) {
+                button.style.backgroundColor = Telegram.WebApp.themeParams.secondary_bg_color;
+                button.style.color = Telegram.WebApp.themeParams.secondary_text_color;
+            });
+        });
+
+        Telegram.WebApp.ready(function() {
+            document.body.style.backgroundColor = Telegram.WebApp.themeParams.bg_color;
+            document.body.style.color = Telegram.WebApp.themeParams.text_color;
+
+            let buttons = document.querySelectorAll('.btn');
+            buttons.forEach(function(button) {
+                button.style.backgroundColor = Telegram.WebApp.themeParams.button_color;
+                button.style.color = Telegram.WebApp.themeParams.button_text_color;
+            });
+
+            let secondaryButtons = document.querySelectorAll('.btn-secondary');
+            secondaryButtons.forEach(function(button) {
+                button.style.backgroundColor = Telegram.WebApp.themeParams.secondary_bg_color;
+                button.style.color = Telegram.WebApp.themeParams.secondary_text_color;
+            });
+        });
     </script>
 </head>
 <body>
@@ -18,8 +50,8 @@
         <div class="buttons">
             <a href="create.html" class="btn">Создать напоминание</a>
             <a href="reminders.html" class="btn">Мои напоминания</a>
-            <a href="edit.html" class="btn">Редактировать напоминание</a>
-            <a href="delete.html" class="btn">Удалить напоминание</a>
+            <a href="edit.html" class="btn btn-secondary">Редактировать напоминание</a>
+            <a href="delete.html" class="btn btn-secondary">Удалить напоминание</a>
         </div>
     </div>
 </body>
