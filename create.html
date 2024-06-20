@@ -78,8 +78,37 @@
 
         document.getElementById('reminderForm').addEventListener('submit', function(event) {
             event.preventDefault();
-            // Здесь можно добавить логику для отправки данных на сервер или обработки формы
-            alert('Напоминание создано!');
+
+            const form = event.target;
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            const userId = Telegram.WebApp.initDataUnsafe.user.id;
+
+            data.userId = userId;
+
+            if (data.frequency === 'weekly') {
+                data.weekdays = [];
+                form.querySelectorAll('input[name="weekday"]:checked').forEach(checkbox => {
+                    data.weekdays.push(checkbox.value);
+                });
+            }
+
+            fetch('/api/reminders', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                alert('Напоминание создано!');
+                // Дополнительная логика обработки ответа сервера
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Произошла ошибка при создании напоминания.');
+            });
         });
 
         Telegram.WebApp.ready();
