@@ -93,6 +93,8 @@
                 });
             }
 
+            console.log("Sending data:", data);
+
             fetch('/api/reminders', {
                 method: 'POST',
                 headers: {
@@ -100,10 +102,17 @@
                 },
                 body: JSON.stringify(data)
             })
-            .then(response => response.json())
+            .then(response => {
+                console.log("Server response:", response);
+                return response.json();
+            })
             .then(result => {
-                alert('Напоминание создано!');
-                // Дополнительная логика обработки ответа сервера
+                if (result.error) {
+                    console.error("Error response from server:", result.error);
+                    alert('Произошла ошибка при создании напоминания.');
+                } else {
+                    alert('Напоминание создано!');
+                }
             })
             .catch(error => {
                 console.error('Error:', error);
