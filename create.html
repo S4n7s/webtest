@@ -82,42 +82,47 @@
             const form = event.target;
             const formData = new FormData(form);
             const data = Object.fromEntries(formData.entries());
-            const userId = Telegram.WebApp.initDataUnsafe.user.id;
 
-            data.userId = userId;
+            if (Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user && Telegram.WebApp.initDataUnsafe.user.id) {
+                const userId = Telegram.WebApp.initDataUnsafe.user.id;
+                data.userId = userId;
 
-            if (data.frequency === 'weekly') {
-                data.weekdays = [];
-                form.querySelectorAll('input[name="weekday"]:checked').forEach(checkbox => {
-                    data.weekdays.push(checkbox.value);
-                });
-            }
-
-            console.log("Sending data:", data);
-
-            fetch('/api/reminders', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => {
-                console.log("Server response:", response);
-                return response.json();
-            })
-            .then(result => {
-                if (result.error) {
-                    console.error("Error response from server:", result.error);
-                    alert('Произошла ошибка при создании напоминания.');
-                } else {
-                    alert('Напоминание создано!');
+                if (data.frequency === 'weekly') {
+                    data.weekdays = [];
+                    form.querySelectorAll('input[name="weekday"]:checked').forEach(checkbox => {
+                        data.weekdays.push(checkbox.value);
+                    });
                 }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Произошла ошибка при создании напоминания.');
-            });
+
+                console.log("Sending data:", data);
+
+                fetch('/api/reminders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    console.log("Server response:", response);
+                    return response.json();
+                })
+                .then(result => {
+                    if (result.error) {
+                        console.error("Error response from server:", result.error);
+                        alert('Произошла ошибка при создании напоминания.');
+                    } else {
+                        alert('Напоминание создано!');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Произошла ошибка при создании напоминания.');
+                });
+            } else {
+                console.error('User data is not available');
+                alert('Ошибка: данные пользователя недоступны.');
+            }
         });
 
         Telegram.WebApp.ready();
